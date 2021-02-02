@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+
+  postgres:
+    image: postgres:13.1-alpine
+    container_name: db-container
+    environment:
+      - POSTGRES_ROOT_PASSWORD=root
+      - POSTGRES_DATABASE=isdb-database
+      - POSTGRESL_USER=myapp-user
+      - POSTGRES_PASSWORD=password
+    ports:
+      - 5432:5432
+
+  api:
+    image: isdb
+    restart: on-failure
+    container_name: api-container
+    depends_on:
+      - mysql
+    ports:
+      - 8080:8080
+    environment:
+      - DATABASE_HOST=postgres
+      - DATABASE_USER=myapp-user
+      - DATABASE_PASSWORD=password
+      - DATABASE_NAME=isdb-database
+      - DATABASE_PORT=5432
